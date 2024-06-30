@@ -20,7 +20,7 @@ async function createNote(req, res) {
 
 async function getAllNotes(req, res) {
     try {
-        const notes = await Note.find({ userId: req.user._id });
+        const notes = await Note.find();
         if (notes.length === 0) return res.send({ message: "No Notes found" });
         res.send(notes);
     } catch (error) {
@@ -28,13 +28,32 @@ async function getAllNotes(req, res) {
     }
 }
 
-async function getNoteById(req, res) {
+async function getNoteByUserId(req, res) {
     try {
-        const note = await Note.findOne({
-            _id: req.params.id,
-            userId: req.user._id,
+        const note = await Note.find({
+            userID: req.params.uid,
         });
-        if (!note) return res.status(404).send({ message: "Note not found" });
+
+        if (note.length === 0)
+            return res
+                .status(404)
+                .send({ message: "Note not found based on User ID" });
+        res.send(note);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+}
+
+async function getNoteByNoteId(req, res) {
+    try {
+        const note = await Note.find({
+            _id: req.params.nid,
+        });
+
+        if (note.length === 0)
+            return res
+                .status(404)
+                .send({ message: "Note not found based on the Note ID" });
         res.send(note);
     } catch (error) {
         res.status(500).send(error);
@@ -72,7 +91,8 @@ async function deleteNote(req, res) {
 module.exports = {
     createNote,
     getAllNotes,
-    getNoteById,
+    getNoteByUserId,
+    getNoteByNoteId,
     updateNote,
     deleteNote,
 };
