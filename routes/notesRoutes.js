@@ -6,7 +6,7 @@ const {
     getNoteByNoteId,
     updateNote,
     deleteNote,
-    deleteNotesByUserId
+    deleteNotesByUserId,
 } = require("../controllers/notesController");
 const auth = require("../middlewares/auth");
 const router = express.Router();
@@ -17,6 +17,6 @@ router.get("/:uid", auth, getNoteByUserId);
 router.get("/id/:nid", auth, getNoteByNoteId);
 router.put("/:nid", auth, updateNote);
 router.delete("/:nid", auth, deleteNote);
-router.delete('/user/:userId', deleteNotesByUserId);
+router.delete("/user/:userId", deleteNotesByUserId);
 
 module.exports = router;
